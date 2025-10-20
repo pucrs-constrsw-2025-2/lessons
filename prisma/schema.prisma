@@ -11,7 +11,7 @@ model Subject {
   id          String   @id @default(uuid())
   description String
   credits     Int
-  lesson      Lesson   @relation(fields: [lessonId], references: [id])
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   lessonId    String
 }
 
@@ -19,19 +19,12 @@ model Lesson {
   id         String    @id @default(uuid())
   sequence   Int
   date       DateTime
-  room       Room      @relation(fields: [roomId], references: [id])
-  roomId     String
-  class      Class     @relation(fields: [classId], references: [id])
-  classId    String
+  roomId     String    // Reference to external Room service
+  classId    String    // Reference to external Class service
   subjects   Subject[]
-}
-
-model Room {
-  id      String   @id @default(uuid())
-  lessons Lesson[]
-}
-
-model Class {
-  id      String   @id @default(uuid())
-  lessons Lesson[]
+  
+  @@index([date])
+  @@index([roomId])
+  @@index([classId])
+  @@unique([sequence, date])
 }

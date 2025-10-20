@@ -11,7 +11,11 @@ import {
 } from '@nestjs/common';
 import { LessonService } from './lesson.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
-import { UpdateLessonDto } from './dto/update-lesson.dto';
+import { UpdateLessonPatchDto } from './dto/update-lesson-patch.dto';
+import { UpdateLessonPutDto } from './dto/update-lesson-put.dto';
+import { CreateSubjectDto } from '../subject/dto/create-subject.dto';
+import { UpdateSubjectPatchDto } from '../subject/dto/update-subject-patch.dto';
+import { UpdateSubjectPutDto } from '../subject/dto/update-subject-put.dto';
 
 @Controller('lessons')
 export class LessonController {
@@ -37,17 +41,70 @@ export class LessonController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonService.update(id, updateLessonDto);
+  updateFull(@Param('id') id: string, @Body() updateLessonPutDto: UpdateLessonPutDto) {
+    return this.lessonService.updateFull(id, updateLessonPutDto);
   }
 
   @Patch(':id')
-  partialUpdate(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    return this.lessonService.update(id, updateLessonDto);
+  updatePartial(@Param('id') id: string, @Body() updateLessonPatchDto: UpdateLessonPatchDto) {
+    return this.lessonService.updatePartial(id, updateLessonPatchDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.lessonService.remove(id);
+  }
+
+  // Subject Endpoints (Nested under Lesson)
+
+  @Post(':lessonId/subjects')
+  createSubject(
+    @Param('lessonId') lessonId: string,
+    @Body() createSubjectDto: CreateSubjectDto,
+  ) {
+    return this.lessonService.createSubject(lessonId, createSubjectDto);
+  }
+
+  @Get(':lessonId/subjects')
+  findAllSubjects(@Param('lessonId') lessonId: string) {
+    return this.lessonService.findAllSubjects(lessonId);
+  }
+
+  @Get(':lessonId/subjects/:subjectId')
+  async findOneSubject(
+    @Param('lessonId') lessonId: string,
+    @Param('subjectId') subjectId: string,
+  ) {
+    const subject = await this.lessonService.findOneSubject(lessonId, subjectId);
+    if (!subject) {
+      throw new NotFoundException(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
+    }
+    return subject;
+  }
+
+  @Put(':lessonId/subjects/:subjectId')
+  updateFullSubject(
+    @Param('lessonId') lessonId: string,
+    @Param('subjectId') subjectId: string,
+    @Body() updateSubjectPutDto: UpdateSubjectPutDto,
+  ) {
+    return this.lessonService.updateFullSubject(lessonId, subjectId, updateSubjectPutDto);
+  }
+
+  @Patch(':lessonId/subjects/:subjectId')
+  updatePartialSubject(
+    @Param('lessonId') lessonId: string,
+    @Param('subjectId') subjectId: string,
+    @Body() updateSubjectPatchDto: UpdateSubjectPatchDto,
+  ) {
+    return this.lessonService.updatePartialSubject(lessonId, subjectId, updateSubjectPatchDto);
+  }
+
+  @Delete(':lessonId/subjects/:subjectId')
+  removeSubject(
+    @Param('lessonId') lessonId: string,
+    @Param('subjectId') subjectId: string,
+  ) {
+    return this.lessonService.removeSubject(lessonId, subjectId);
   }
 }

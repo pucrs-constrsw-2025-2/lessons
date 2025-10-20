@@ -1,0 +1,320 @@
+ENDPOINTS PARA LESSONS (/lessons)
+
+1. POST {{BASE_URL}}/lessons
+   Funcionalidade: Criação de um novo objeto de lição.
+   Descrição: Permite enviar os dados de uma lição para criar um novo registro no sistema.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+* Content-Type: application/json
+* Accept: application/json
+
+Body:
+{
+"sequence": 1,
+"date": "2025-10-27T10:00:00Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+Response
+Codes:
+
+* 201 Created: Objeto criado com sucesso.
+* 400 Bad Request: JSON inválido ou erro de validação.
+* 401 Unauthorized: Autenticação ausente ou inválida.
+* 403 Forbidden: Usuário sem permissão.
+* 409 Conflict: Conflito (sequence e date já existentes).
+
+Body:
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 1,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+---
+
+2. GET {{BASE_URL}}/lessons
+   Funcionalidade: Recuperar todas as lições.
+   Descrição: Retorna uma lista completa de todas as lições cadastradas.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+* Accept: application/json
+
+Response
+Codes:
+
+* 200 OK: Sucesso.
+* 204 No Content: Nenhuma lição encontrada.
+* 401 Unauthorized / 403 Forbidden
+
+Body:
+[
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 1,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+},
+{
+"id": "f8e7d6c5-b4a3-2109-8765-4321fedcba98",
+"sequence": 2,
+"date": "2025-10-28T11:00:00.000Z",
+"roomId": "1234abcd-ef01-2345-6789-abcd01234567",
+"classId": "fedcba98-7654-3210-fedc-ba9876543210"
+}
+]
+
+---
+
+3. GET {{BASE_URL}}/lessons/{id}
+   Funcionalidade: Recuperar uma lição específica pelo ID.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+* Accept: application/json
+
+Path Parameter:
+
+* id (UUID da lição)
+
+Response
+Codes:
+
+* 200 OK
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+
+Body:
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 1,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+---
+
+4. PUT {{BASE_URL}}/lessons/{id}
+   Funcionalidade: Atualização total de uma lição existente.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+* Content-Type: application/json
+* Accept: application/json
+
+Body:
+{
+"sequence": 1,
+"date": "2025-10-27T10:00:00Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+Response
+Codes:
+
+* 200 OK
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+* 409 Conflict
+
+Body:
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 1,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+---
+
+5. PATCH {{BASE_URL}}/lessons/{id}
+   Funcionalidade: Atualização parcial de uma lição.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+* Content-Type: application/json
+* Accept: application/json
+
+Body:
+{
+"sequence": 2
+}
+
+Response
+Codes:
+
+* 200 OK
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+* 409 Conflict
+
+Body:
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 2,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+---
+
+6. DELETE {{BASE_URL}}/lessons/{id}
+   Funcionalidade: Exclusão de uma lição específica.
+
+Request
+Headers:
+
+* Authorization: Bearer <token_jwt> (se aplicável)
+
+Response
+Codes:
+
+* 200 OK
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+
+Body:
+{
+"id": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f",
+"sequence": 2,
+"date": "2025-10-27T10:00:00.000Z",
+"roomId": "e2c3a5b6-d7e8-9f01-2345-6789abcd0123",
+"classId": "a1b2c3d4-e5f6-7890-1234-5678abcd9012"
+}
+
+(O corpo do DELETE pode variar conforme a implementação.)
+
+---
+
+ENDPOINTS PARA SUBJECTS (/lessons/{lessonId}/subjects)
+
+7. POST {{BASE_URL}}/lessons/{lessonId}/subjects
+   Criação de um novo assunto associado a uma lição.
+
+Body:
+{
+"description": "Introdução à Programação",
+"credits": 4,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+Response:
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Introdução à Programação",
+"credits": 4,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+---
+
+8. GET {{BASE_URL}}/lessons/{lessonId}/subjects
+   Retorna todos os assuntos de uma lição.
+
+Response:
+[
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Introdução à Programação",
+"credits": 4,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+},
+{
+"id": "f0e1d2c3-b4a5-6789-0123-456789fedcba",
+"description": "Estruturas de Dados",
+"credits": 6,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+]
+
+---
+
+9. GET {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}
+   Recupera um assunto específico vinculado a uma lição.
+
+Response:
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Introdução à Programação",
+"credits": 4,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+---
+
+10. PUT {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}
+    Atualiza completamente um assunto de uma lição.
+
+Body:
+{
+"description": "Tópicos Avançados em Programação",
+"credits": 8,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+Response:
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Tópicos Avançados em Programação",
+"credits": 8,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+---
+
+11. PATCH {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}
+    Atualiza parcialmente um assunto.
+
+Body:
+{
+"credits": 6
+}
+
+Response:
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Introdução à Programação",
+"credits": 6,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
+
+---
+
+12. DELETE {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}
+    Exclui um assunto específico vinculado a uma lição.
+
+Response:
+{
+"id": "a0b1c2d3-e4f5-6789-0123-456789abcdef",
+"description": "Introdução à Programação",
+"credits": 6,
+"lessonId": "7b1c3d5e-a2b3-4c5d-6e7f-8a9b0c1d2e3f"
+}
