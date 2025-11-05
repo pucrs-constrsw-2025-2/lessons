@@ -1,4 +1,4 @@
-import { IsInt, IsString, IsUUID } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 
 export class CreateSubjectDto {
   @IsString()
@@ -6,7 +6,4 @@ export class CreateSubjectDto {
 
   @IsInt()
   credits: number;
-
-  @IsUUID()
-  lessonId: string;
 }

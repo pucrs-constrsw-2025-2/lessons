@@ -25,6 +25,7 @@ RUN apk add --no-cache curl
 COPY package*.json ./
 RUN npm ci --omit=dev
 
+COPY --from=builder /usr/src/app/.env ./.env
 COPY --from=builder /usr/src/app/dist ./dist
 COPY --from=builder /usr/src/app/prisma ./prisma
 COPY --from=builder /usr/src/app/node_modules/.prisma ./node_modules/.prisma

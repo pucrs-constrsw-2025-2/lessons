@@ -1,37 +1,84 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Put,
+  ParseUUIDPipe,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { SubjectService } from './subject.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
 import { UpdateSubjectPatchDto } from './dto/update-subject-patch.dto';
+import { UpdateSubjectPutDto } from './dto/update-subject-put.dto';
 
-@Controller('subjects')
+// Nested routing under lessons: /lessons/:lessonId/subjects
+@Controller('lessons/:lessonId/subjects')
 export class SubjectController {
   constructor(private readonly subjectService: SubjectService) {}
 
   @Post()
-  create(@Body() createSubjectDto: CreateSubjectDto) {
-    return this.subjectService.create(createSubjectDto);
+  create(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+    @Body() createSubjectDto: CreateSubjectDto,
+  ) {
+    return this.subjectService.create(lessonId, createSubjectDto);
   }
 
   @Get()
-  findAll() {
-    return this.subjectService.findAll();
+  async findAll(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+  ) {
+    const items = await this.subjectService.findAll(lessonId);
+    if (!items || items.length === 0) {
+      throw new HttpException('', HttpStatus.NO_CONTENT);
+    }
+    return items;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.subjectService.findOne(id);
+  @Get(':subjectId')
+  findOne(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+    @Param('subjectId', new ParseUUIDPipe({ version: '4' })) subjectId: string,
+  ) {
+    return this.subjectService.findOne(lessonId, subjectId);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
+  @Put(':subjectId')
+  updateFull(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+    @Param('subjectId', new ParseUUIDPipe({ version: '4' })) subjectId: string,
+    @Body() updateSubjectPutDto: UpdateSubjectPutDto,
+  ) {
+    return this.subjectService.updateFull(
+      lessonId,
+      subjectId,
+      updateSubjectPutDto,
+    );
+  }
+
+  @Patch(':subjectId')
+  updatePartial(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+    @Param('subjectId', new ParseUUIDPipe({ version: '4' })) subjectId: string,
     @Body() updateSubjectPatchDto: UpdateSubjectPatchDto,
   ) {
-    return this.subjectService.update(id, updateSubjectPatchDto);
+    return this.subjectService.updatePartial(
+      lessonId,
+      subjectId,
+      updateSubjectPatchDto,
+    );
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.subjectService.remove(id);
+  @Delete(':subjectId')
+  remove(
+    @Param('lessonId', new ParseUUIDPipe({ version: '4' })) lessonId: string,
+    @Param('subjectId', new ParseUUIDPipe({ version: '4' })) subjectId: string,
+  ) {
+    return this.subjectService.remove(lessonId, subjectId);
   }
 }

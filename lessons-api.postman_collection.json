@@ -7,13 +7,47 @@
   },
   "item": [
     {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            },
+            "description": "Health check endpoint (no authentication required)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
       "name": "Lessons",
       "item": [
         {
           "name": "Get all lessons",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons",
               "host": [
@@ -44,13 +78,23 @@
             "method": "POST",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"sequence\": 1,\n    \"date\": \"2025-10-08T10:00:00.000Z\",\n    \"roomId\": \"a1b2c3d4-e5f6-7890-1234-5678abcd9012\",\n    \"classId\": \"b1c2d3e4-f5a6-7890-1234-5678abcd9013\"\n}"
+              "raw": "{\n    \"sequence\": 1,\n    \"date\": \"2025-10-27T10:00:00.000Z\",\n    \"roomId\": \"e2c3a5b6-d7e8-9f01-2345-6789abcd0123\",\n    \"classId\": \"a1b2c3d4-e5f6-7890-1234-5678abcd9012\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons",
@@ -68,7 +112,18 @@
           "name": "Get a lesson by ID",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}",
               "host": [
@@ -88,13 +143,23 @@
             "method": "PUT",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"sequence\": 2,\n    \"date\": \"2025-10-09T10:00:00.000Z\",\n    \"roomId\": \"a1b2c3d4-e5f6-7890-1234-5678abcd9012\",\n    \"classId\": \"b1c2d3e4-f5a6-7890-1234-5678abcd9013\"\n}"
+              "raw": "{\n    \"sequence\": 2,\n    \"date\": \"2025-10-27T10:00:00.000Z\",\n    \"roomId\": \"e2c3a5b6-d7e8-9f01-2345-6789abcd0123\",\n    \"classId\": \"a1b2c3d4-e5f6-7890-1234-5678abcd9012\"\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}",
@@ -115,8 +180,18 @@
             "method": "PATCH",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
@@ -140,7 +215,13 @@
           "name": "Delete a lesson",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}",
               "host": [
@@ -149,129 +230,6 @@
               "path": [
                 "lessons",
                 "{{lessonId}}"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
-      "name": "Subjects",
-      "item": [
-        {
-          "name": "Get all subjects",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/subjects",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create a new subject",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "pm.collectionVariables.set(\"subjectId\", jsonData.id);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"description\": \"My new subject\",\n    \"credits\": 4,\n    \"lessonId\": \"{{lessonId}}\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/subjects",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get a subject by ID",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update a subject",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"description\": \"Updated subject description\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete a subject",
-          "request": {
-            "method": "DELETE",
-            "header": [],
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
               ]
             }
           },
@@ -300,13 +258,23 @@
             "method": "POST",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"description\": \"Nested Subject\",\n    \"credits\": 3,\n    \"lessonId\": \"{{lessonId}}\"\n}"
+              "raw": "{\n    \"description\": \"Introdução à Programação\",\n    \"credits\": 4\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects",
@@ -326,7 +294,18 @@
           "name": "Get all subjects for lesson",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects",
               "host": [
@@ -345,7 +324,18 @@
           "name": "Get subject by ID from lesson",
           "request": {
             "method": "GET",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects/{{nestedSubjectId}}",
               "host": [
@@ -367,13 +357,23 @@
             "method": "PUT",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"description\": \"Updated Nested Subject\",\n    \"credits\": 5,\n    \"lessonId\": \"{{lessonId}}\"\n}"
+              "raw": "{\n    \"description\": \"Tópicos Avançados em Programação\",\n    \"credits\": 8\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects/{{nestedSubjectId}}",
@@ -396,8 +396,18 @@
             "method": "PATCH",
             "header": [
               {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              },
+              {
                 "key": "Content-Type",
                 "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json",
+                "type": "text"
               }
             ],
             "body": {
@@ -423,7 +433,13 @@
           "name": "Delete subject from lesson",
           "request": {
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects/{{nestedSubjectId}}",
               "host": [
@@ -445,19 +461,24 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:3000"
+      "value": "http://localhost:8184",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string",
+      "description": "JWT token from OAuth service"
     },
     {
       "key": "lessonId",
-      "value": ""
-    },
-    {
-      "key": "subjectId",
-      "value": ""
+      "value": "",
+      "type": "string"
     },
     {
       "key": "nestedSubjectId",
-      "value": ""
+      "value": "",
+      "type": "string"
     }
   ]
 }
