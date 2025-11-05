@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonPatchDto } from './dto/update-lesson-patch.dto';
 import { UpdateLessonPutDto } from './dto/update-lesson-put.dto';
@@ -11,8 +12,20 @@ import { PrismaService } from '../prisma/prisma.service';
 export class LessonService {
   constructor(private prisma: PrismaService) {}
 
-  create(createLessonDto: CreateLessonDto) {
-    return this.prisma.lesson.create({ data: createLessonDto });
+  async create(createLessonDto: CreateLessonDto) {
+    try {
+      return await this.prisma.lesson.create({ data: createLessonDto });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'A lesson with the same sequence and date already exists',
+        );
+      }
+      throw error;
+    }
   }
 
   findAll() {
@@ -26,20 +39,44 @@ export class LessonService {
   async updateFull(id: string, updateLessonPutDto: UpdateLessonPutDto) {
     const existingLesson = await this.prisma.lesson.findUnique({ where: { id } });
     if (!existingLesson) {
-      throw new Error(`Lesson with ID ${id} not found`);
+      throw new NotFoundException(`Lesson with ID ${id} not found`);
     }
 
-    return this.prisma.lesson.update({
-      where: { id },
-      data: updateLessonPutDto,
-    });
+    try {
+      return await this.prisma.lesson.update({
+        where: { id },
+        data: updateLessonPutDto,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'A lesson with the same sequence and date already exists',
+        );
+      }
+      throw error;
+    }
   }
 
-  updatePartial(id: string, updateLessonPatchDto: UpdateLessonPatchDto) {
-    return this.prisma.lesson.update({
-      where: { id },
-      data: updateLessonPatchDto,
-    });
+  async updatePartial(id: string, updateLessonPatchDto: UpdateLessonPatchDto) {
+    try {
+      return await this.prisma.lesson.update({
+        where: { id },
+        data: updateLessonPatchDto,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new ConflictException(
+          'A lesson with the same sequence and date already exists',
+        );
+      }
+      throw error;
+    }
   }
 
   remove(id: string) {
@@ -60,11 +97,11 @@ export class LessonService {
   }
 
   async findOneSubject(lessonId: string, subjectId: string) {
-    const subject = await this.prisma.subject.findUnique({
+    const subject = await this.prisma.subject.findFirst({
       where: { id: subjectId, lessonId },
     });
     if (!subject) {
-      throw new Error(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
+      throw new NotFoundException(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
     }
     return subject;
   }
@@ -75,15 +112,15 @@ export class LessonService {
     updateSubjectPutDto: UpdateSubjectPutDto,
   ) {
     await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
-    const existingSubject = await this.prisma.subject.findUnique({
+    const existingSubject = await this.prisma.subject.findFirst({
       where: { id: subjectId, lessonId },
     });
     if (!existingSubject) {
-      throw new Error(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
+      throw new NotFoundException(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
     }
 
     return this.prisma.subject.update({
-      where: { id: subjectId, lessonId },
+      where: { id: subjectId },
       data: updateSubjectPutDto,
     });
   }
@@ -94,28 +131,28 @@ export class LessonService {
     updateSubjectPatchDto: UpdateSubjectPatchDto,
   ) {
     await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
-    const existingSubject = await this.prisma.subject.findUnique({
+    const existingSubject = await this.prisma.subject.findFirst({
       where: { id: subjectId, lessonId },
     });
     if (!existingSubject) {
-      throw new Error(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
+      throw new NotFoundException(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
     }
 
     return this.prisma.subject.update({
-      where: { id: subjectId, lessonId },
+      where: { id: subjectId },
       data: updateSubjectPatchDto,
     });
   }
 
   async removeSubject(lessonId: string, subjectId: string) {
     await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
-    const existingSubject = await this.prisma.subject.findUnique({
+    const existingSubject = await this.prisma.subject.findFirst({
       where: { id: subjectId, lessonId },
     });
     if (!existingSubject) {
-      throw new Error(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
+      throw new NotFoundException(`Subject with ID ${subjectId} not found in Lesson ${lessonId}`);
     }
 
-    return this.prisma.subject.delete({ where: { id: subjectId, lessonId } });
+    return this.prisma.subject.delete({ where: { id: subjectId } });
   }
 }

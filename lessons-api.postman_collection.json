@@ -238,177 +238,6 @@
       ]
     },
     {
-      "name": "Subjects",
-      "item": [
-        {
-          "name": "Get all subjects",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subjects",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Create a new subject",
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "exec": [
-                  "var jsonData = pm.response.json();",
-                  "pm.collectionVariables.set(\"subjectId\", jsonData.id);"
-                ],
-                "type": "text/javascript"
-              }
-            }
-          ],
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"description\": \"Introdução à Programação\",\n    \"credits\": 4,\n    \"lessonId\": \"{{lessonId}}\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/subjects",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Get a subject by ID",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Update a subject (PATCH)",
-          "request": {
-            "method": "PATCH",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              },
-              {
-                "key": "Accept",
-                "value": "application/json",
-                "type": "text"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"description\": \"Updated subject description\"\n}"
-            },
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
-              ]
-            }
-          },
-          "response": []
-        },
-        {
-          "name": "Delete a subject",
-          "request": {
-            "method": "DELETE",
-            "header": [
-              {
-                "key": "Authorization",
-                "value": "Bearer {{token}}",
-                "type": "text"
-              }
-            ],
-            "url": {
-              "raw": "{{baseUrl}}/subjects/{{subjectId}}",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "subjects",
-                "{{subjectId}}"
-              ]
-            }
-          },
-          "response": []
-        }
-      ]
-    },
-    {
       "name": "Nested Subjects",
       "item": [
         {
@@ -445,7 +274,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"description\": \"Introdução à Programação\",\n    \"credits\": 4,\n    \"lessonId\": \"{{lessonId}}\"\n}"
+              "raw": "{\n    \"description\": \"Introdução à Programação\",\n    \"credits\": 4\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects",
@@ -544,7 +373,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"description\": \"Tópicos Avançados em Programação\",\n    \"credits\": 8,\n    \"lessonId\": \"{{lessonId}}\"\n}"
+              "raw": "{\n    \"description\": \"Tópicos Avançados em Programação\",\n    \"credits\": 8\n}"
             },
             "url": {
               "raw": "{{baseUrl}}/lessons/{{lessonId}}/subjects/{{nestedSubjectId}}",
@@ -643,11 +472,6 @@
     },
     {
       "key": "lessonId",
-      "value": "",
-      "type": "string"
-    },
-    {
-      "key": "subjectId",
       "value": "",
       "type": "string"
     },
