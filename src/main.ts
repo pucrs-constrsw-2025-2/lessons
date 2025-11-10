@@ -1,3 +1,4 @@
+import './instrumentation';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
@@ -12,12 +13,16 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  // Prefixo global de API (excluindo /health)
+  app.setGlobalPrefix('api/v1', {
+    exclude: ['health'],
+  });
   
   // Aplicar middleware de autenticação globalmente
   const authMiddleware = new AuthMiddleware();
   app.use(async (req, res, next) => {
     // Excluir rotas que não precisam de autenticação
-    if ((req.path === '/health' || req.path === '/') && req.method === 'GET') {
+    if ((req.path === '/' || req.path === '/health') && req.method === 'GET') {
       return next();
     }
     

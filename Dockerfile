@@ -4,7 +4,8 @@ FROM node:20-alpine AS builder
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install --package-lock-only || true
+RUN npm ci --legacy-peer-deps || npm install --legacy-peer-deps
 
 COPY . .
 
@@ -23,7 +24,8 @@ WORKDIR /usr/src/app
 RUN apk add --no-cache curl
 
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm install --package-lock-only --omit=dev || true
+RUN npm ci --omit=dev --legacy-peer-deps || npm install --omit=dev --legacy-peer-deps
 
 COPY --from=builder /usr/src/app/.env ./.env
 COPY --from=builder /usr/src/app/dist ./dist
