@@ -61,6 +61,11 @@ export class LessonService {
   }
 
   async updatePartial(id: string, updateLessonPatchDto: UpdateLessonPatchDto) {
+    const existingLesson = await this.prisma.lesson.findUnique({ where: { id } });
+    if (!existingLesson) {
+      throw new NotFoundException(`Lesson with ID ${id} not found`);
+    }
+
     try {
       return await this.prisma.lesson.update({
         where: { id },
@@ -75,12 +80,33 @@ export class LessonService {
           'A lesson with the same sequence and date already exists',
         );
       }
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Lesson with ID ${id} not found`);
+      }
       throw error;
     }
   }
 
-  remove(id: string) {
-    return this.prisma.lesson.delete({ where: { id } });
+  async remove(id: string) {
+    const existingLesson = await this.prisma.lesson.findUnique({ where: { id } });
+    if (!existingLesson) {
+      throw new NotFoundException(`Lesson with ID ${id} not found`);
+    }
+    
+    try {
+      return await this.prisma.lesson.delete({ where: { id } });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Lesson with ID ${id} not found`);
+      }
+      throw error;
+    }
   }
 
   // Subject Service Methods (Nested under Lesson)

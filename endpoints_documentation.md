@@ -4,9 +4,9 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-## **Endpoints para `Lessons` (`/lessons`)**
+## **Endpoints para `Lessons` (`/api/v1/lessons`)**
 
-### **1. `POST {{BASE_URL}}/lessons`**
+### **1. `POST {{BASE_URL}}/api/v1/lessons`**
 - **Funcionalidade:** Criação de um novo objeto de lição.
 - **Descrição:** Permite enviar os dados de uma lição para criar um novo registro no sistema.
 
@@ -45,7 +45,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **2. `GET {{BASE_URL}}/lessons`**
+### **2. `GET {{BASE_URL}}/api/v1/lessons`**
 - **Funcionalidade:** Recuperação de todos os objetos de lição.
 - **Descrição:** Retorna uma lista completa de todas as lições cadastradas no sistema.
 
@@ -84,7 +84,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **3. `GET {{BASE_URL}}/lessons/{id}`**
+### **3. `GET {{BASE_URL}}/api/v1/lessons/{id}`**
 - **Funcionalidade:** Recuperação de um objeto de lição pelo seu ID.
 - **Descrição:** Busca e retorna uma lição específica utilizando seu identificador único.
 
@@ -117,7 +117,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **4. `PUT {{BASE_URL}}/lessons/{id}`**
+### **4. `PUT {{BASE_URL}}/api/v1/lessons/{id}`**
 - **Funcionalidade:** Atualização total de um objeto de lição.
 - **Descrição:** Substitui completamente os dados de uma lição existente pelo ID fornecido, exigindo que todos os campos obrigatórios de `CreateLessonDto` sejam enviados.
 
@@ -159,7 +159,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **5. `PATCH {{BASE_URL}}/lessons/{id}`**
+### **5. `PATCH {{BASE_URL}}/api/v1/lessons/{id}`**
 - **Funcionalidade:** Atualização parcial (de alguns atributos) de um objeto de lição.
 - **Descrição:** Atualiza seletivamente os campos de uma lição existente pelo ID fornecido, aceitando apenas os campos que precisam ser modificados.
 
@@ -198,7 +198,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **6. `DELETE {{BASE_URL}}/lessons/{id}`**
+### **6. `DELETE {{BASE_URL}}/api/v1/lessons/{id}`**
 - **Funcionalidade:** Exclusão de um objeto de lição.
 - **Descrição:** Remove uma lição específica do sistema utilizando seu identificador único.
 
@@ -231,9 +231,9 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-## **Endpoints para `Subjects` (Aninhados em `Lessons`: `/lessons/{lessonId}/subjects`)**
+## **Endpoints para `Subjects` (Aninhados em `Lessons`: `/api/v1/lessons/{lessonId}/subjects`)**
 
-### **7. `POST {{BASE_URL}}/lessons/{lessonId}/subjects`**
+### **7. `POST {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects`**
 - **Funcionalidade:** Criação de um novo objeto de assunto associado a uma lição.
 - **Descrição:** Permite criar um novo assunto (`CreateSubjectDto`) e associá-lo à lição especificada pelo `lessonId`.
 
@@ -272,7 +272,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **8. `GET {{BASE_URL}}/lessons/{lessonId}/subjects`**
+### **8. `GET {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects`**
 - **Funcionalidade:** Recuperação de todos os objetos de assunto de uma lição.
 - **Descrição:** Retorna uma lista de todos os assuntos que pertencem à lição especificada pelo `lessonId`.
 
@@ -313,7 +313,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **9. `GET {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}`**
+### **9. `GET {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects/{subjectId}`**
 - **Funcionalidade:** Recuperação de um objeto de assunto específico de uma lição.
 - **Descrição:** Busca e retorna um assunto específico (`subjectId`) que está associado à lição (`lessonId`).
 
@@ -346,7 +346,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **10. `PUT {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}`**
+### **10. `PUT {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects/{subjectId}`**
 - **Funcionalidade:** Atualização total de um objeto de assunto específico de uma lição.
 - **Descrição:** Substitui completamente os dados de um assunto (`subjectId`) associado a uma lição (`lessonId`), exigindo que todos os campos obrigatórios de `CreateSubjectDto` sejam enviados.
 
@@ -386,7 +386,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **11. `PATCH {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}`**
+### **11. `PATCH {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects/{subjectId}`**
 - **Funcionalidade:** Atualização parcial de um objeto de assunto específico de uma lição.
 - **Descrição:** Atualiza seletivamente os campos de um assunto (`subjectId`) associado a uma lição (`lessonId`), aceitando apenas os campos que precisam ser modificados.
 
@@ -424,7 +424,7 @@ A seguir, uma documentação detalhada dos endpoints disponíveis para manipula�
 
 ---
 
-### **12. `DELETE {{BASE_URL}}/lessons/{lessonId}/subjects/{subjectId}`**
+### **12. `DELETE {{BASE_URL}}/api/v1/lessons/{lessonId}/subjects/{subjectId}`**
 - **Funcionalidade:** Exclusão de um objeto de assunto específico de uma lição.
 - **Descrição:** Remove um assunto específico (`subjectId`) que está associado à lição (`lessonId`).
 

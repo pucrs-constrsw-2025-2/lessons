@@ -8,17 +8,20 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SubjectService {
   constructor(private prisma: PrismaService) {}
 
-  create(lessonId: string, createSubjectDto: CreateSubjectDto) {
+  async create(lessonId: string, createSubjectDto: CreateSubjectDto) {
+    await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
     return this.prisma.subject.create({
       data: { ...createSubjectDto, lessonId },
     });
   }
 
-  findAll(lessonId: string) {
+  async findAll(lessonId: string) {
+    await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
     return this.prisma.subject.findMany({ where: { lessonId } });
   }
 
   async findOne(lessonId: string, subjectId: string) {
+    await this.prisma.lesson.findUniqueOrThrow({ where: { id: lessonId } });
     const subject = await this.prisma.subject.findFirst({
       where: { id: subjectId, lessonId },
     });
