@@ -1,0 +1,514 @@
+openapi: 3.1.0
+info:
+  title: ConstrSW - Lessons API
+  description: API para gerenciamento de aulas e assuntos
+  version: 1.0.0
+servers:
+  - url: http://localhost:8184
+    description: Servidor de desenvolvimento (externo)
+  - url: http://lessons:3000
+    description: Servidor interno (Docker)
+
+tags:
+  - name: Lessons
+    description: Gerenciamento de aulas
+  - name: Subjects
+    description: Gerenciamento de assuntos
+
+paths:
+  /api/v1/lessons:
+    post:
+      tags:
+        - Lessons
+      summary: Criar uma nova aula
+      operationId: createLesson
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonCreateRequest'
+      responses:
+        '201':
+          description: Aula criada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    get:
+      tags:
+        - Lessons
+      summary: Listar todas as aulas
+      operationId: findAllLessons
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Lista de aulas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LessonResponse'
+        '204':
+          description: Nenhuma aula encontrada
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/lessons/{id}:
+    get:
+      tags:
+        - Lessons
+      summary: Buscar aula por ID
+      operationId: findOneLesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Dados da aula
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Lessons
+      summary: Atualizar aula (completo)
+      operationId: updateFullLesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonUpdatePutRequest'
+      responses:
+        '200':
+          description: Aula atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - Lessons
+      summary: Atualizar aula (parcial)
+      operationId: updatePartialLesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonUpdatePatchRequest'
+      responses:
+        '200':
+          description: Aula atualizada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Lessons
+      summary: Deletar aula
+      operationId: removeLesson
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Aula deletada
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/lessons/{lessonId}/subjects:
+    post:
+      tags:
+        - Subjects
+      summary: Criar assunto para uma aula
+      operationId: createSubject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectCreateRequest'
+      responses:
+        '201':
+          description: Assunto criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    get:
+      tags:
+        - Subjects
+      summary: Listar assuntos de uma aula
+      operationId: findAllSubjects
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Lista de assuntos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubjectResponse'
+        '204':
+          description: Nenhum assunto encontrado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/lessons/{lessonId}/subjects/{subjectId}:
+    get:
+      tags:
+        - Subjects
+      summary: Buscar assunto específico
+      operationId: findOneSubject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Dados do assunto
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Subjects
+      summary: Atualizar assunto (completo)
+      operationId: updateFullSubject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectUpdatePutRequest'
+      responses:
+        '200':
+          description: Assunto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - Subjects
+      summary: Atualizar assunto (parcial)
+      operationId: updatePartialSubject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectUpdatePatchRequest'
+      responses:
+        '200':
+          description: Assunto atualizado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubjectResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Subjects
+      summary: Deletar assunto
+      operationId: removeSubject
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: lessonId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: subjectId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Assunto deletado
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /health:
+    get:
+      tags:
+        - Health
+      summary: Health check
+      operationId: healthCheck
+      responses:
+        '200':
+          description: Serviço está funcionando
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  responses:
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Não autorizado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Recurso não encontrado
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  schemas:
+    LessonCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+
+    LessonUpdatePutRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+
+    LessonUpdatePatchRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+
+    LessonResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+        description:
+          type: string
+        date:
+          type: string
+          format: date-time
+
+    SubjectCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    SubjectUpdatePutRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    SubjectUpdatePatchRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+
+    SubjectResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        detail:
+          type: string
+

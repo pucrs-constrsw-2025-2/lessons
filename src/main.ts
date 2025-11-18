@@ -2,6 +2,7 @@ import './instrumentation';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { AuthMiddleware } from './middleware/auth.middleware';
@@ -17,12 +18,34 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1', {
     exclude: ['health'],
   });
+
+  // Swagger documentation
+  const config = new DocumentBuilder()
+    .setTitle('Lessons API')
+    .setDescription('API para gerenciamento de aulas e assuntos')
+    .setVersion('1.0.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter JWT token',
+      },
+      'bearer',
+    )
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api/v1/docs', app, document);
   
   // Aplicar middleware de autenticação globalmente
   const authMiddleware = new AuthMiddleware();
   app.use(async (req, res, next) => {
     // Excluir rotas que não precisam de autenticação
-    if ((req.path === '/' || req.path === '/health') && req.method === 'GET') {
+    if (
+      (req.path === '/' || req.path === '/health' || req.path.startsWith('/api/v1/docs')) &&
+      req.method === 'GET'
+    ) {
       return next();
     }
     
