@@ -78,6 +78,10 @@ async function bootstrap() {
     }
   });
   
-  await app.listen(3000);
+  // Prefer the explicit internal port configured in docker-compose (LESSONS_INTERNAL_API_PORT)
+  const port = process.env.PORT ?? process.env.LESSONS_INTERNAL_API_PORT ?? 3000;
+  const host = '0.0.0.0';
+  
+  await app.listen(port, host);
 }
 bootstrap();
