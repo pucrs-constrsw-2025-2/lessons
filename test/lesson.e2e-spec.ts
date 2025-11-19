@@ -34,7 +34,7 @@ describe('LessonController (e2e)', () => {
           ok: true,
           headers: { get: () => 'application/json' },
           json: () => Promise.resolve({ sub: 'test-user', active: true }),
-        } as Response);
+        } as unknown as Response);
       }
       
       // Token inválido
@@ -43,7 +43,7 @@ describe('LessonController (e2e)', () => {
         status: 401,
         headers: { get: () => 'application/json' },
         json: () => Promise.resolve({ error: 'Invalid token' }),
-      } as Response);
+      } as unknown as Response);
     });
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
