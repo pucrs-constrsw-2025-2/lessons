@@ -14,10 +14,8 @@ dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
-  // Prefixo global de API (excluindo /health)
-  app.setGlobalPrefix('api/v1', {
-    exclude: ['health'],
-  });
+  // Prefixo global de API
+  app.setGlobalPrefix('api/v1');
 
   // Swagger documentation
   const config = new DocumentBuilder()
@@ -43,7 +41,7 @@ async function bootstrap() {
   app.use(async (req, res, next) => {
     // Excluir rotas que não precisam de autenticação
     if (
-      (req.path === '/' || req.path === '/health' || req.path.startsWith('/api/v1/docs')) &&
+      (req.path === '/' || req.path === '/api/v1/health' || req.path.startsWith('/api/v1/docs')) &&
       req.method === 'GET'
     ) {
       return next();

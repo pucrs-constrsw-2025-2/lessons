@@ -70,7 +70,7 @@ export class AuthMiddleware implements NestMiddleware {
 
     const baseUrl =
       process.env.OAUTH_SERVICE_URL ?? this.buildInternalBaseUrl();
-    const path = process.env.OAUTH_VALIDATE_PATH ?? '/validate';
+    const path = process.env.OAUTH_VALIDATE_PATH ?? '/api/v1/validate';
 
     const normalizedBase = baseUrl.endsWith('/')
       ? baseUrl.slice(0, -1)
