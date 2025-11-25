@@ -63,7 +63,7 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 
-  /api/v1/lessons/{id}:
+  /api/v1/lessons/{lessonId}:
     get:
       tags:
         - Lessons
@@ -72,7 +72,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: lessonId
           in: path
           required: true
           schema:
@@ -98,7 +98,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: lessonId
           in: path
           required: true
           schema:
@@ -132,7 +132,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: lessonId
           in: path
           required: true
           schema:
@@ -166,7 +166,7 @@ paths:
       security:
         - bearerAuth: []
       parameters:
-        - name: id
+        - name: lessonId
           in: path
           required: true
           schema:
@@ -386,7 +386,7 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 
-  /health:
+  /api/v1/health:
     get:
       tags:
         - Health
@@ -395,6 +395,20 @@ paths:
       responses:
         '200':
           description: Serviço está funcionando
+
+  /api/v1/metrics:
+    get:
+      tags:
+        - Metrics
+      summary: Métricas Prometheus
+      operationId: getMetrics
+      responses:
+        '200':
+          description: Métricas em formato Prometheus
+          content:
+            text/plain:
+              schema:
+                type: string
 
 components:
   securitySchemes:
